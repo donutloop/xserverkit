@@ -68,10 +68,14 @@ type (
 
 // New return a new instance of a pointer to Render
 func New(opts *Options) *Render {
-	r := &Render{
-		opts:      *opts,
+	var r *Render
+	if opts == nil {
+		r = new(Render)
+	}else{
+		r = &Render{
+			opts:      *opts,
+		}
 	}
-
 	// build options for the Render instance
 	r.buildOptions()
 	return r
