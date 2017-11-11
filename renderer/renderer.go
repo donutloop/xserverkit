@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	yaml "gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -20,8 +19,6 @@ const (
 	ContentJSON string = "application/json"
 	// ContentXML represents content type application/xml
 	ContentXML string = "application/xml"
-	// ContentYAML represents content type application/x-yaml
-	ContentYAML string = "application/x-yaml"
 	// ContentHTML represents content type text/html
 	ContentHTML string = "text/html"
 	// ContentText represents content type text/plain
@@ -84,7 +81,6 @@ func New(opts *Options) *Render {
 func (r *Render) buildOptions() {
 	r.opts.ContentJSON = ContentJSON
 	r.opts.ContentXML = ContentXML
-	r.opts.ContentYAML = ContentYAML
 	r.opts.ContentHTML = ContentHTML
 	r.opts.ContentText = ContentText
 	r.opts.ContentBinary = ContentBinary
@@ -146,19 +142,6 @@ func (r *Render) XML(w http.ResponseWriter, status int, v interface{}) error {
 	} else {
 		bs, err = xml.Marshal(v)
 	}
-	if err != nil {
-		return err
-	}
-	_, err = w.Write(bs)
-	return err
-}
-
-// YAML serve data as YAML response
-func (r *Render) YAML(w http.ResponseWriter, status int, v interface{}) error {
-	w.Header().Set(ContentType, r.opts.ContentYAML)
-	w.WriteHeader(status)
-
-	bs, err := yaml.Marshal(v)
 	if err != nil {
 		return err
 	}
